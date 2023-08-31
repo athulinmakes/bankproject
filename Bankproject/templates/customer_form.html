@@ -1,0 +1,52 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    Login Page
+{% endblock %}
+{% block title %}
+ SWISS BANK
+
+{% endblock %}
+
+{% block content %}
+
+ <form method="post"  style="border: 1px solid #ccc; padding: 20px; background-color: #57b846;;">
+        <h1>Application Form</h1><br>
+        <div style="display: inline-block;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <input type="submit" value="Submit" style="background-color: aqua;padding: 10px 20px; border: none; border-radius: 5px;"><br>
+</div>
+    </form></div></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Chained dropdown logic
+        $(document).ready(function() {
+            // On change event of 'district' field
+            $('#id_district').on('change', function() {
+                var districtId = $(this).val();
+                // Send an AJAX request to get branches based on the selected district
+                $.ajax({
+                    url: '/api/get_branches/',  // Replace with the actual API endpoint to fetch branches based on district
+                    method: 'GET',
+                    data: {district_id: districtId},
+                    dataType: 'json',
+                    success: function(data) {
+                        // Clear existing options in 'branch' dropdown
+                        $('#id_branch').empty();
+                        // Append new options based on the retrieved data
+                        $.each(data.branches, function(index, branch) {
+                            $('#id_branch').append($('<option>').text(branch.name).attr('value', branch.id));
+                        });
+                    },
+                    error: function() {
+                        alert('Failed to fetch branches.');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
